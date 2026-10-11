@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>理财入门经典 · 交互学习资料</title>
+<meta name="description" content="融合《小狗钱钱》与《富爸爸穷爸爸》两大理财入门经典的交互式学习页面，面向纯入门读者。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234F7C5E'/%3E%3Ccircle cx='13' cy='16' r='7' fill='%23F7F5EF'/%3E%3Ccircle cx='19' cy='16' r='5' fill='%23C98A3D'/%3E%3C/svg%3E">
+<style>
+/* ============ 设计 token ============ */
+:root{
+  --bg:#F7F5EF;
+  --bg-soft:#EFEADF;
+  --paper:#FFFFFF;
+  --ink:#2B2A26;
+  --ink-soft:#6B6A60;
+  --line:#E2DCCE;
+  --leaf:#4F7C5E;      /* 青瓷绿 · 主线 */
+  --leaf-deep:#3A6247;
+  --amber:#C98A3D;     /* 琥珀金 · 强调 */
+  --amber-deep:#A96F26;
+  --soft:#EEF2EE;
+  --warm:#C06A4F;      /* 陶红 · 警示 */
+  --shadow:0 6px 24px rgba(50,60,40,.08);
+  --radius:14px;
+  --fs:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  line-height:1.85;
+  font-size:var(--fs);
+}
+h1,h2,h3,.serif{font-family:"Noto Serif SC","Songti SC",Georgia,"Times New Roman",serif}
+::selection{background:rgba(201,138,61,.22)}
+
+/* ============ 顶部 Hero ============ */
+.hero{
+  position:relative;
+  background:
+    radial-gradient(1100px 380px at 85% -10%, rgba(201,138,61,.16), transparent 60%),
+    radial-gradient(900px 400px at 5% 10%, rgba(79,124,94,.14), transparent 60%),
+    var(--bg-soft);
+  border-bottom:1px solid var(--line);
+  padding:56px 24px 40px;
+  text-align:center;
+  overflow:hidden;
+}
+.hero .mark{
+  width:58px;height:58px;margin:0 auto 18px;border-radius:14px;
+  background:var(--leaf);color:#fff;
+  display:grid;place-items:center;font-weight:800;font-size:26px;
+  box-shadow:0 0 0 8px rgba(79,124,94,.14);
+}
+.hero h1{
+  font-size:clamp(26px,4.5vw,44px);
+  font-weight:900;
+  letter-spacing:.5px;
+  color:var(--ink);
+}
+.hero .sub{
+  margin-top:10px;
+  font-size:clamp(14px,2vw,17px);
+  color:var(--ink-soft);
+  max-width:660px;margin-left:auto;margin-right:auto;
+}
+.hero .meta{margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.hero .chip{
+  background:var(--paper);border:1px solid var(--line);color:var(--ink-soft);
+  font-size:12.5px;padding:5px 12px;border-radius:999px;
+}
+.hero .stats{margin-top:22px;display:flex;gap:26px;justify-content:center;flex-wrap:wrap}
+.hero .stat{text-align:center}
+.hero .stat b{display:block;font-size:28px;color:var(--leaf-deep);font-weight:800}
+.hero .stat span{font-size:12px;color:var(--ink-soft)}
+
+/* ============ 布局 ============ */
+.layout{max-width:1180px;margin:0 auto;padding:0 20px;display:flex;gap:24px;align-items:flex-start}
+.main{flex:1;min-width:0;padding:28px 0 80px}
+
+/* ============ 侧边导航 ============ */
+.sidebar{
+  width:264px;flex-shrink:0;position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto;
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px;
+}
+.s-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.s-head h3{font-size:13px;color:var(--ink-soft);letter-spacing:1px;margin:0 6px 4px;font-weight:700}
+.menu-toggle{
+  display:none;border:1px solid var(--line);background:var(--bg);color:var(--ink-soft);
+  width:34px;height:30px;border-radius:8px;cursor:pointer;font-size:16px;line-height:1;flex-shrink:0;
+}
+.menu-toggle:hover{color:var(--leaf-deep);border-color:var(--leaf)}
+.navtop{
+  display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink-soft);
+  padding:8px;border-radius:8px;font-size:13.5px;cursor:pointer;
+}
+.navtop:hover{background:var(--bg-soft);color:var(--ink)}
+.navtop.active{background:var(--soft);color:var(--leaf-deep);font-weight:600}
+.sidebar .phase{font-size:12px;color:var(--leaf);font-weight:700;margin:14px 8px 6px}
+.navlist{list-style:none}
+.navlist li{margin:2px 0}
+.navlist a{
+  display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;
+  color:var(--ink-soft);text-decoration:none;font-size:13.5px;transition:background .15s,color .15s;
+}
+.navlist a:hover{background:var(--bg-soft);color:var(--ink)}
+.navlist a.active{background:var(--soft);color:var(--leaf-deep);font-weight:600}
+.navlist a .no{font-size:11.5px;color:var(--amber-deep);font-weight:700;width:20px;flex-shrink:0}
+.navlist a .dot{margin-left:auto;width:10px;height:10px;border-radius:50%;background:var(--line)}
+.navlist a.done .dot{background:var(--leaf)}
+
+/* ============ 进度条 ============ */
+.progressbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);padding:10px 20px}
+.progressbar .inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.progressbar .label{font-size:12.5px;color:var(--ink-soft);white-space:nowrap}
+.progressbar .track{flex:1;height:8px;background:var(--bg-soft);border-radius:99px;overflow:hidden}
+.progressbar .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--leaf),var(--leaf-deep));border-radius:99px;transition:width .4s}
+.progressbar .pct{font-size:12.5px;color:var(--leaf-deep);font-weight:700;min-width:44px;text-align:right}
+
+/* ============ 视图容器 ============ */
+.view{display:none}
+.view.active{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ============ 模块卡片 ============ */
+.lesson-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:22px;overflow:hidden}
+.lesson-head{padding:22px 26px 18px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.lesson-head .badge{width:46px;height:46px;flex-shrink:0;border-radius:12px;background:var(--soft);color:var(--leaf-deep);display:grid;place-items:center;font-size:20px;font-weight:800}
+.lesson-head h2{font-size:21px;font-weight:800;line-height:1.3}
+.lesson-head .theme{color:var(--ink-soft);font-size:13.5px;margin-top:2px}
+.lesson-body{padding:8px 26px 24px}
+.section-label{font-size:12.5px;font-weight:800;letter-spacing:1px;color:#fff;padding:3px 12px;border-radius:999px;display:inline-block;margin:16px 0 10px}
+.section-label.key{background:var(--amber)}
+.section-label.deep{background:var(--leaf)}
+.section-label.quote{background:var(--leaf-deep)}
+.card-list{list-style:none}
+.card-list li{position:relative;padding:6px 0 6px 22px;font-size:15px}
+.card-list li::before{content:"";position:absolute;left:2px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--amber)}
+.section-label.deep + .card-list li::before{background:var(--leaf)}
+.deep-block{margin:8px 0 0}
+.deep-block .dtitle{
+  font-weight:700;font-size:15px;color:var(--ink);margin:16px 0 4px;padding-left:10px;border-left:3px solid var(--leaf);
+  cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.deep-block .chev{transition:transform .2s;flex-shrink:0;font-size:12px;color:var(--ink-soft)}
+.deep-block.collapsed .chev{transform:rotate(-90deg)}
+.deep-block.collapsed .card-list{display:none}
+.card-list li b{color:var(--amber-deep)}
+.deep-block .card-list li b{color:var(--leaf-deep)}
+.quote-block{background:var(--bg-soft);border-radius:10px;padding:14px 18px;margin:8px 0;font-size:15px;color:var(--ink);line-height:1.8}
+.quote-block .src{display:block;margin-top:4px;font-size:12px;color:var(--ink-soft)}
+.quote-block .src::before{content:"— ";color:var(--amber-deep)}
+
+/* 分区锚点条 */
+.part-bar{display:flex;gap:8px;flex-wrap:wrap;padding:14px 26px;border-bottom:1px solid var(--line);background:var(--bg)}
+.part-bar a{text-decoration:none;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink-soft);border:1px solid var(--line);background:var(--paper);padding:5px 14px;border-radius:999px;transition:all .15s}
+.part-bar a:hover{color:var(--leaf-deep);border-color:var(--leaf)}
+[id^="part-"]{scroll-margin-top:72px}
+
+/* ============ 总览地图 ============ */
+.overview .phase-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px;margin-bottom:20px}
+.phase-card h2{font-size:18px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:10px}
+.phase-card .ph-tag{font-size:12px;padding:2px 10px;border-radius:999px;color:#fff;font-weight:700}
+.phase-card p.ph-desc{color:var(--ink-soft);font-size:13.5px;margin-top:4px}
+.phase-card .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:16px}
+.phase-card .grid a{text-decoration:none;color:var(--ink);background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;display:flex;gap:8px;align-items:center;transition:transform .15s,border-color .15s}
+.phase-card .grid a:hover{transform:translateY(-2px);border-color:var(--leaf)}
+.phase-card .grid a .no{color:var(--amber-deep);font-weight:800}
+.phase-card .grid a .st{margin-left:auto;font-size:11px;color:var(--ink-soft)}
+
+/* ============ 速查表 ============ */
+.concept-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:20px}
+.searchbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.searchbar input{flex:1;min-width:200px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:var(--bg);font-family:inherit;outline:none;transition:border-color .15s}
+.searchbar input:focus{border-color:var(--leaf)}
+.concept-table{width:100%;border-collapse:collapse;table-layout:fixed}
+.concept-table col:nth-child(1){width:22%}
+.concept-table col:nth-child(2){width:58%}
+.concept-table col:nth-child(3){width:20%}
+.concept-table th{text-align:left;padding:10px 12px;font-size:13px;color:var(--ink-soft);border-bottom:2px solid var(--leaf);background:var(--bg-soft)}
+.concept-table td{padding:9px 12px;font-size:13.5px;border-bottom:1px solid var(--line);vertical-align:top}
+.concept-table tr:hover td{background:var(--bg-soft)}
+.concept-table .cname{font-weight:700;color:var(--leaf-deep)}
+.concept-table .ccur{color:var(--ink-soft);font-size:12.5px;white-space:nowrap}
+.empty{color:var(--ink-soft);text-align:center;padding:20px;font-size:14px}
+
+/* ============ 来源说明 / 免责 ============ */
+.source-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:20px}
+.source-card h2{font-size:19px;font-weight:800;margin-bottom:4px}
+.source-card .intro{color:var(--ink-soft);font-size:13.5px;margin-bottom:16px}
+.source-card h3{font-size:15px;font-weight:700;margin:18px 0 8px;color:var(--ink)}
+.source-card ul{padding-left:22px;font-size:14.5px}
+.source-card li{margin:6px 0}
+.source-card .note{background:var(--bg-soft);border-radius:8px;padding:12px 16px;margin-top:16px;font-size:13.5px;color:var(--ink-soft)}
+
+/* ============ 金句轮播 ============ */
+.quote-daily{background:linear-gradient(120deg,rgba(201,138,61,.12),rgba(79,124,94,.10)),var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:26px;text-align:center;margin-bottom:20px}
+.quote-daily .qtext{font-size:18px;font-weight:600;max-width:560px;margin:0 auto;line-height:1.7;color:var(--ink)}
+.quote-daily .qfrom{color:var(--ink-soft);font-size:13px;margin-top:8px}
+.quote-daily button{margin-top:14px;border:none;background:var(--paper);color:var(--amber-deep);border:1px solid var(--line);padding:8px 18px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:13px;transition:background .15s}
+.quote-daily button:hover{background:#fff}
+.quote-daily .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+
+/* ============ 工具条 ============ */
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.toolbar .title{font-size:15px;font-weight:800;color:var(--ink);margin-right:auto}
+.toolbar button{border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);padding:6px 14px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:12.5px;transition:all .15s}
+.toolbar button:hover{border-color:var(--leaf);color:var(--leaf-deep)}
+.toolbar button.on{background:var(--leaf);color:#fff;border-color:var(--leaf)}
+.font-ctl{display:flex;gap:6px;align-items:center}
+.font-ctl span{font-size:12px;color:var(--ink-soft)}
+.font-ctl button{min-width:36px;text-align:center}
+
+/* ============ 小工具：72法则 ============ */
+.calc-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:20px}
+.calc-card h2{font-size:19px;font-weight:800;margin-bottom:4px}
+.calc-card p{color:var(--ink-soft);font-size:13.5px;margin-bottom:14px}
+.calc-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.calc-row input{flex:1;min-width:180px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:var(--bg);font-family:inherit;outline:none}
+.calc-row input:focus{border-color:var(--leaf)}
+.calc-row button{border:none;background:var(--leaf);color:#fff;padding:10px 20px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:14px}
+.calc-row button:hover{background:var(--leaf-deep)}
+.calc-result{margin-top:14px;font-size:15px;color:var(--leaf-deep);font-weight:600}
+.calc-result b{font-size:22px}
+
+/* ============ 页脚 ============ */
+.footer{border-top:1px solid var(--line);background:var(--bg-soft);padding:28px 24px;text-align:center;color:var(--ink-soft);font-size:13px}
+.footer b{color:var(--ink)}
+
+/* ============ 回顶 / toast / modal ============ */
+#toTop{position:fixed;right:24px;bottom:28px;z-index:50;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--leaf-deep);font-size:18px;cursor:pointer;box-shadow:var(--shadow);display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .2s}
+#toTop.show{opacity:1;pointer-events:auto}
+#toTop:hover{background:#fff}
+#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:999px;font-size:13.5px;opacity:0;pointer-events:none;transition:all .3s;z-index:60;box-shadow:var(--shadow);max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.modal-overlay{position:fixed;inset:0;background:rgba(43,42,38,.45);z-index:70;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--paper);border-radius:var(--radius);max-width:640px;width:100%;max-height:80vh;display:flex;flex-direction:column;box-shadow:var(--shadow);border:1px solid var(--line);overflow:hidden}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line)}
+.modal-head h3{font-size:17px;font-weight:800}
+.modal-head button{border:none;background:none;font-size:24px;cursor:pointer;color:var(--ink-soft);line-height:1;padding:0 4px}
+.modal-head button:hover{color:var(--ink)}
+.modal-body{overflow-y:auto;padding:18px 22px}
+.modal-body .m-quote{background:var(--bg-soft);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:14.5px}
+.modal-body .m-quote .f{display:block;font-size:12px;color:var(--ink-soft);margin-top:3px}
+
+/* ============ 响应式 ============ */
+@media(max-width:880px){
+  .layout{flex-direction:column}
+  .sidebar{width:100%;position:static;max-height:none;order:-1}
+  .menu-toggle{display:block}
+  .sidebar .navwrap{display:none}
+  .sidebar.open .navwrap{display:block}
+  .sidebar .navlist{display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
+  .concept-table{display:block;overflow-x:auto}
+  #toTop{right:16px;bottom:20px}
+}
+@media(max-width:520px){
+  body{font-size:15px}
+  .lesson-head,.lesson-body,.part-bar{padding-left:16px;padding-right:16px}
+  .phase-card .grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.view.active{animation:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="mark">¥</div>
+  <h1>理财入门经典 · 交互学习</h1>
+  <p class="sub">融合《小狗钱钱》与《富爸爸穷爸爸》两大财商启蒙经典 · 面向纯入门读者</p>
+  <div class="meta">
+    <span class="chip">观念 · 习惯 · 方法</span>
+    <span class="chip">核心要点 · 深入解读 · 金句</span>
+    <span class="chip">附概念速查 + 72法则计算</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>6</b><span>学习模块</span></div>
+    <div class="stat"><b>2</b><span>经典书目</span></div>
+    <div class="stat"><b>3</b><span>底层原则</span></div>
+  </div>
+</header>
+
+<div class="progressbar">
+  <div class="inner">
+    <span class="label">学习进度</span>
+    <div class="track"><div class="fill" id="progFill"></div></div>
+    <span class="pct" id="progPct">0/6</span>
+  </div>
+</div>
+
+<div class="layout">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="s-head">
+      <h3>学习目录</h3>
+      <button class="menu-toggle" id="menuToggle" aria-label="展开或收起目录">☰</button>
+    </div>
+    <div class="navwrap">
+      <a href="#overview" class="navtop" data-nav="overview">课程总览</a>
+      <div id="sideNav"></div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <section class="view" id="view-overview">
+      <div class="toolbar">
+        <span class="title">六大模块全貌</span>
+        <button id="resetAllBtn">重置学习进度</button>
+      </div>
+      <div id="overviewBody"></div>
+    </section>
+
+    <section class="view" id="view-lessons">
+      <div class="toolbar">
+        <span class="title">模块学习</span>
+        <div class="font-ctl"><span>字号</span><button id="fontDec" aria-label="缩小字号">A-</button><button id="fontInc" aria-label="放大字号">A+</button></div>
+      </div>
+      <div class="quote-daily" id="quoteDaily"></div>
+      <div id="lessonBody"></div>
+      <div class="toolbar" style="margin-top:6px">
+        <button id="prevBtn">← 上一模块</button>
+        <button id="nextBtn">下一模块 →</button>
+        <span id="curPos" style="margin-left:auto;font-size:13px;color:var(--ink-soft)"></span>
+      </div>
+    </section>
+
+    <section class="view" id="view-concepts">
+      <div class="toolbar"><span class="title">概念速查表</span></div>
+      <div class="concept-card">
+        <div class="searchbar">
+          <input type="text" id="conceptSearch" placeholder="输入关键词搜索概念（如：资产 / 鹅 / 复利 / 定投）">
+          <button id="clearSearch">清除</button>
+        </div>
+        <table class="concept-table">
+          <colgroup><col><col><col></colgroup>
+          <thead><tr><th>概念</th><th>含义</th><th>出处</th></tr></thead>
+          <tbody id="conceptBody"></tbody>
+        </table>
+        <div class="empty" id="conceptEmpty" style="display:none">未找到匹配的概念</div>
+      </div>
+    </section>
+
+    <section class="view" id="view-calc">
+      <div class="toolbar"><span class="title">小工具：72 法则</span></div>
+      <div class="calc-card">
+        <h2>钱翻一倍要多久？</h2>
+        <p>「72 法则」：本金翻倍所需年数 ≈ 72 ÷ 年化收益率。快速感受复利的威力。</p>
+        <div class="calc-row">
+          <input type="number" id="rateInput" placeholder="输入预期年化收益率，如 6（%）" min="0.1" max="100" step="0.1">
+          <button id="calcBtn">计算</button>
+        </div>
+        <div class="calc-result" id="calcResult">输入一个年化收益率，看看你的钱多久翻倍。</div>
+      </div>
+    </section>
+
+    <section class="view" id="view-source">
+      <div class="toolbar"><span class="title">来源与说明</span></div>
+      <div class="source-card" id="sourceBody"></div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="footer">
+  <p><b>理财入门经典 · 交互学习资料</b></p>
+  <p>本页面为学习整理，基于《小狗钱钱》《富爸爸穷爸爸》及公开理财常识，非投资建议。</p>
+  <p style="margin-top:6px;font-size:12px">整理时间：2026-10-11</p>
+</footer>
+
+<button id="toTop" aria-label="回到顶部">↑</button>
+<div id="toast"></div>
+<div class="modal-overlay" id="quoteModal">
+  <div class="modal">
+    <div class="modal-head"><h3>全部金句</h3><button id="quoteClose" aria-label="关闭">×</button></div>
+    <div class="modal-body" id="quoteModalBody"></div>
+  </div>
+</div>
+
+<script>
+/* ============ 数据：模块 ============ */
+const PHASES=[
+  {name:"观念篇",desc:"先想清楚钱是什么",tag:"#4F7C5E",lessons:[1,2]},
+  {name:"习惯篇",desc:"储蓄与债务的基本功",tag:"#C98A3D",lessons:[3,4]},
+  {name:"方法篇",desc:"让钱为你工作",tag:"#3A6247",lessons:[5,6]}
+];
+
+/* ============ 数据：概念速查 ============ */
+const CONCEPTS=[
+  {n:"先存后花",d:"钱到账先分配，再消费；顺序反了存不下钱",c:"小狗钱钱"},
+  {n:"养鹅",d:"鹅=本金，金蛋=利息；养大鹅=让钱为你工作，杀鹅=花光本金",c:"小狗钱钱"},
+  {n:"收入三分法",d:"50%养鹅 + 40%梦想储蓄罐 + 10%日常开销",c:"小狗钱钱"},
+  {n:"72法则",d:"本金翻倍年数 ≈ 72 ÷ 年化收益率",c:"小狗钱钱"},
+  {n:"梦想储蓄罐",d:"为具体目标单独存钱，把愿望变成计划",c:"小狗钱钱"},
+  {n:"还债四法则",d:"注销信用卡·最低还款·半存半还·不借消费贷",c:"小狗钱钱"},
+  {n:"资产 vs 负债",d:"资产把钱放进你口袋，负债把钱从你口袋拿走",c:"富爸爸"},
+  {n:"财富定义",d:"财富=今天停止工作还能活多久",c:"富爸爸"},
+  {n:"现金流",d:"资产带来的持续钱流，决定你是富还是穷",c:"富爸爸"},
+  {n:"现金流四象限",d:"E雇员·S自由职业·B企业主·I投资者",c:"富爸爸"},
+  {n:"让钱工作",d:"买能产生现金流的资产，而非为钱拼命打工",c:"富爸爸"},
+  {n:"紧急备用金",d:"存3-6个月基本开销，放高流动低风险处",c:"通用常识"},
+  {n:"记账 + 拿铁因子",d:"记下每笔支出，找出并砍掉不必要的小额消费",c:"通用常识"},
+  {n:"指数基金定投",d:"定期定额买宽基指数基金，摊平成本、长期坚持",c:"通用常识"},
+  {n:"复利",d:"利滚利，时间越长威力越大，是入门核心概念",c:"通用常识"}
+];
+
+/* ============ 数据：来源 ============ */
+const SOURCE={
+  intro:"本页面的内容融合自两大理财入门经典，并补充公认的基础理财常识。要点取自多方公开读书笔记与机构资料，仅作学习整理，非投资建议。",
+  books:[
+    "《小狗钱钱》· 博多·舍费尔 —— 观念与习惯：金钱观、养鹅储蓄、债务管理、72法则（内容参考得到听书解读、豆瓣读书笔记等公开整理）",
+    "《富爸爸穷爸爸》· 罗伯特·清崎 —— 方法：资产/负债、现金流、财富定义、四象限（内容参考富爸爸官网、新浪财经解读等公开资料）",
+    "基础理财常识 —— 紧急备用金、记账、指数基金定投、复利等（参考中国证券投资基金业协会、上海证券报、上交所ETF知识等机构资料）"
+  ],
+  note:"理财是个人化的事：同样的方法，不同收入、不同家庭、不同风险承受能力下差别很大。页面里的比例（如 50/40/10、3-6个月备用金）是经典建议，实际执行请结合自己的收支调整。投资有风险，页面不构成任何具体投资或买卖建议。"
+};
+
+/* ============ 数据：金句 ============ */
+const QUOTES=[
+  {t:"并非困难使我们放弃，而是因为我们放弃，才显得如此困难。",f:"《小狗钱钱》"},
+  {t:"假如我们缺钱的话，钱就会变得格外重要。",f:"《小狗钱钱》"},
+  {t:"我们的支出永远是随着我们的收入而增长的。",f:"《小狗钱钱》"},
+  {t:"钱是中性的，就像一个放大镜，会暴露一个人的本性。",f:"《小狗钱钱》"},
+  {t:"一个人能否安排好自己的花费，是在他人生的早期就决定了的。",f:"《小狗钱钱》"},
+  {t:"你赚多少不重要，你能留下多少才重要。",f:"《富爸爸穷爸爸》"},
+  {t:"资产是把钱放进你口袋的东西，负债是把钱从你口袋拿走的东西。",f:"《富爸爸穷爸爸》"},
+  {t:"财富就是支撑你生存多长时间的能力。",f:"《富爸爸穷爸爸》"},
+  {t:"穷爸爸说「我付不起」，富爸爸问「我怎么才能付得起」。",f:"《富爸爸穷爸爸》"},
+  {t:"让钱为你工作，而不是你为钱工作。",f:"《富爸爸穷爸爸》"},
+  {t:"你关注什么，你的财商就会在哪里生长。",f:"入门寄语"},
+  {t:"存钱不靠意志，靠把「先存后花」变成习惯。",f:"入门寄语"}
+];
+/* ============ 数据：六大模块正文 ============ */
+const LESSONS=[
+{
+  no:1, theme:"观念篇", title:"钱的本质",
+  key:[
+    "**钱是中性的**，像一个放大镜：它不会使人幸福，也不会带来不幸，只会暴露并放大你本来的样子。",
+    "**先存后花 > 先花后存**：钱到账先分配，再消费；顺序反了，永远存不下钱。",
+    "穷人思维说「**我付不起**」（关闭思考），富人思维问「**我怎么才能付得起**」（开启思考）。",
+    "**你赚多少不重要，你能留下多少才重要**。"
+  ],
+  deep:[
+    {t:"钱是什么", l:[
+      "《小狗钱钱》反复强调：钱本身既不会让人幸福，也不会带来不幸。它像放大镜，帮人更充分展现本来的样子——所以先修自己的心，钱只是工具。",
+      "「我也不认为钱是人一生中最重要的东西，可假如我们缺钱的话，钱就会变得格外重要。」",
+      "「一个人能否安排好花费，往往在人生早期就决定了」——理财是一种可以早学、越早越好的能力。"
+    ]},
+    {t:"先存后花：顺序决定成败", l:[
+      "很多普通人存不下钱，不是因为赚得少，而是**顺序反了**：先花，剩多少存多少——结果通常没剩。",
+      "正确的顺序：**收入到账 → 先分配（储蓄/梦想/日常）→ 再消费**。先分配再花钱，钱才能留下。",
+      "「我们的支出永远是随着收入增长而增长的」——收入提高若不主动储蓄，支出会同步吃掉。"
+    ]},
+    {t:"两种思维（穷爸爸 vs 富爸爸）", l:[
+      "面对「想要但买不起」：穷爸爸说「我付不起」——这句话关闭了思考；富爸爸问「我怎么才能付得起」——这句话打开了通往解决方案的门。",
+      "关注点的差别决定行为：一个看到限制，一个看到可能性。",
+      "「你赚多少不重要，你能留下多少才重要」——留存率比收入本身更能说明问题。"
+    ]}
+  ],
+  quote:[
+    {t:"假如我们缺钱的话，钱就会变得格外重要。",f:"《小狗钱钱》"},
+    {t:"我们的支出永远是随着我们的收入而增长的。",f:"《小狗钱钱》"},
+    {t:"穷爸爸说「我付不起」，富爸爸问「我怎么才能付得起」。",f:"《富爸爸穷爸爸》"},
+    {t:"你赚多少不重要，你能留下多少才重要。",f:"《富爸爸穷爸爸》"}
+  ]
+},
+{
+  no:2, theme:"观念篇", title:"资产与负债",
+  key:[
+    "**资产是把钱放进你口袋的东西，负债是把钱从你口袋拿走的东西**。",
+    "很多人把**自住房**当资产，但若只消耗现金流（月供、物业、水电），它其实是负债。",
+    "**财富 = 今天停止工作还能活多久**，由你积累的资产产生的现金流衡量。",
+    "读懂资产/负债/现金流，是财商的第一块地基。"
+  ],
+  deep:[
+    {t:"资产与负债的判定", l:[
+      "清崎的定义与会计意义上的资产不同：**能带来持续现金流入的才是资产**（产生租金、分红、利息的投资、房产、企业），**持续拿走现金的是负债**（房贷、车贷、信用卡债）。",
+      "判断标准不是「它值多少钱」，而是「它往你的口袋放钱，还是拿走钱」。",
+      "常见误区：把自住房、自用车当成资产——但若只花钱不产生收入，它们是负债。只有当房产出租产生租金，才成为资产。"
+    ]},
+    {t:"现金流是核心", l:[
+      "资产 → 现金流收益 → 更多资产：这是变富的循环。",
+      "负债 → 现金流流失：房子、车子、消费贷持续抽走你的钱，越买越穷。",
+      "富人买入资产，穷人买入自以为的资产（实际是负债），中产买入自以为的负债（自住房）。"
+    ]},
+    {t:"财富的定义", l:[
+      "「财富就是支撑一个人生存多长时间的能力——如果今天停止工作，我还能活多久？」",
+      "衡量标准不是存款数字，而是**资产产生的现金流能覆盖生活多久**。",
+      "所以积累「能产生现金流的资产」，比单纯攒一笔现金更接近财富。"
+    ]}
+  ],
+  quote:[
+    {t:"资产是把钱放进你口袋的东西，负债是把钱从你口袋拿走的东西。",f:"《富爸爸穷爸爸》"},
+    {t:"财富就是支撑你生存多长时间的能力。",f:"《富爸爸穷爸爸》"},
+    {t:"富人买入资产，穷人买入负债，中产买入自以为的负债。",f:"《富爸爸穷爸爸》"}
+  ]
+},
+{
+  no:3, theme:"习惯篇", title:"储蓄与养鹅",
+  key:[
+    "**养一只会下金蛋的鹅**：鹅＝本金，金蛋＝利息；养大鹅＝让钱为你工作，杀鹅＝花光本金。",
+    "**收入三分法**：50% 养鹅 + 40% 梦想储蓄罐 + 10% 日常开销。",
+    "**梦想储蓄罐**：把愿望变成具体可执行的计划，目标越具体越有动力。",
+    "理财的第一步不是赚大钱，而是**把养鹅变成习惯**——哪怕每月只存一小笔也坚决执行。"
+  ],
+  deep:[
+    {t:"鹅与金蛋（全书核心寓言）", l:[
+      "农夫杀死了下金蛋的鹅，从此没了金蛋——对应现实中：**把本金花光，就永远失去被动收入**。",
+      "鹅＝你用来产生收益的本金，金蛋＝利息/收益。养大鹅＝让本金产生更多被动收入。",
+      "「会赚钱只是生存的基础，会管钱才是变富的关键，而管钱的终极智慧是养一只永远不杀的下金蛋的鹅。」"
+    ]},
+    {t:"收入三分法", l:[
+      "吉娅的做法：把收入分成三份——**50% 养鹅（储蓄/投资）、40% 放进梦想储蓄罐、10% 日常零花**。",
+      "关键在**顺序**：收入到账先按比例分配，再考虑消费，而不是花完看剩多少。",
+      "比例可按自己调整，但「**先分配再花钱**」的铁律不变；哪怕先只存 10% 也要坚决执行。"
+    ]},
+    {t:"梦想储蓄罐：把愿望变成计划", l:[
+      "列出你最想要的愿望清单，为每个具体目标单独建储蓄罐——让抽象愿望变成可感的进度。",
+      "配合同步的「**成功日记**」：每天记下几件做成的小事，积累自信，避免半途而废。",
+      "目标越具体、越看得见，坚持储蓄的动力越强。"
+    ]}
+  ],
+  quote:[
+    {t:"理财的第一步不是赚大钱，而是先养大你的鹅。",f:"《小狗钱钱》"},
+    {t:"把钱分成三份：一份养鹅，一份追梦，一份生活。",f:"《小狗钱钱》"},
+    {t:"先存后花，顺序对了，钱自然留下。",f:"入门寄语"}
+  ]
+},
+{
+  no:4, theme:"习惯篇", title:"债务管理",
+  key:[
+    "**还债四法则**：①注销多余的信用卡；②分期尽量选最低还款额；③扣掉生活费后，一半还债、一半储蓄；④最好不要申请消费贷款。",
+    "借债前先问自己：**「这真的有必要吗？」**",
+    "别**借新还旧**——拆东墙补西墙是陷阱。",
+    "先存下 **3-6 个月基本开销**的紧急备用金，放高流动、低风险处。"
+  ],
+  deep:[
+    {t:"还债四法则（详解）", l:[
+      "**注销多余的信用卡**：避免透支未来，减少冲动消费的入口。",
+      "**按最低分期还款额还**：不要把所有结余都砸进去还债——手里要留现金，否则急用钱只能借更高利息的新贷款，陷入死循环。",
+      "**扣掉基础生活费后，一半还债、一半存起来**：边还债边养鹅，防止「还完债两手空空」。",
+      "**不要申请消费贷款**：为消费品背上贷款，是用未来的钱买当下，代价极高。"
+    ]},
+    {t:"量入为出，砍掉拿铁因子", l:[
+      "每次消费前问「这真的有必要吗？」——用一句话拦住冲动消费。",
+      "记账找到自己的「拿铁因子」：那些不必要的小额日常支出（每天一杯的习惯性消费等），日积月累是一大笔钱。",
+      "学会区分「需要」和「想要」：先满足需要，克制想要。"
+    ]},
+    {t:"紧急备用金", l:[
+      "在投资之前，**先备好 3-6 个月基本生活开销**的现金，应对失业、生病等突发。",
+      "放在**流动性高、低风险**的地方（如货币基金、活期），不追求收益，只求随时可取。",
+      "有了备用金，才不会在意外来临时被迫借高息或变卖资产。"
+    ]}
+  ],
+  quote:[
+    {t:"欠债的人应当毁掉所有的信用卡。",f:"《小狗钱钱》"},
+    {t:"消费前问自己：这真的有必要吗？",f:"《小狗钱钱》"},
+    {t:"先把备用金存够，再谈投资。",f:"入门寄语"}
+  ]
+},
+{
+  no:5, theme:"方法篇", title:"让钱为你工作",
+  key:[
+    "**现金流四象限**：E 雇员、S 自由职业、B 企业主、I 投资者——逐步从左侧走向右侧。",
+    "**让钱为你工作，而不是你为钱工作**：买入能产生现金流的资产。",
+    "**复利与 72 法则**：本金翻倍年数 ≈ 72 ÷ 年化收益率。",
+    "越早开始、时间越长，复利的威力越大。"
+  ],
+  deep:[
+    {t:"现金流四象限", l:[
+      "**E（雇员）**：替别人工作，用时间换工资，不干活就没收入——绝大多数人。",
+      "**S（自由职业者）**：为自己工作（诊所、工作室），比雇员自由，但本质仍是用时间换钱。",
+      "**B（企业主）**：拥有一套系统/团队为你工作。",
+      "**I（投资者）**：让钱（资产）为你工作，用现金流覆盖生活——财务自由的方向。",
+      "目标不是一定要辞职，而是逐步培养「资产产生现金流」的能力。"
+    ]},
+    {t:"被动收入 vs 主动收入", l:[
+      "**主动收入**：靠劳动和时间换取，停下来就没有。",
+      "**被动收入**：来自资产——租金、分红、利息、企业利润，即使不工作也持续流入。",
+      "变富的关键，是把主动收入的一部分，持续转化为能产生被动收入的资产。"
+    ]},
+    {t:"复利与 72 法则", l:[
+      "复利＝利滚利：本金和收益一起生息，时间越长增长越陡峭（滚雪球）。",
+      "**72 法则**：年化收益率 r，翻倍年数 ≈ 72 ÷ r。例：年化 6%，约 12 年翻倍；年化 10%，约 7.2 年。",
+      "复利的关键变量是**时间和长期性**——越早开始、坚持越久，效果越惊人；这也是为什么入门就要先培养储蓄习惯。"
+    ]}
+  ],
+  quote:[
+    {t:"让钱为你工作，而不是你为钱工作。",f:"《富爸爸穷爸爸》"},
+    {t:"钱生钱，越早开始，复利越惊人。",f:"入门寄语"},
+    {t:"存钱、养鹅、让收益滚动——本金会自己长大。",f:"入门寄语"}
+  ]
+},
+{
+  no:6, theme:"方法篇", title:"入门实操",
+  key:[
+    "**记账 + 找拿铁因子**：记录每一笔支出，砍掉不必要的小额消费。",
+    "先建好 **3-6 个月紧急备用金**，再谈投资。",
+    "**指数基金定投**：定期定额买入宽基指数基金（如沪深 300），摊平成本、长期坚持。",
+    "用**「亏得起、不影响生活」的闲钱**投资，坚持长期主义。"
+  ],
+  deep:[
+    {t:"第一步：记账与先存后花", l:[
+      "先重塑消费习惯：**把花钱顺序倒过来，变成先存后花**，每月强制存下几百到上千，一年就是一笔本金。",
+      "配合**记账**，找出并砍掉「拿铁因子」（不必要的小额日常支出），几年可攒出第一桶金。",
+      "先用小成功建立习惯，再逐步加大储蓄比例。"
+    ]},
+    {t:"第二步：紧急备用金 + 基础保障", l:[
+      "投资前先存下 **3-6 个月基本开销**，放高流动、低风险处（货币基金等）。",
+      "有余力再配基础保障（保险），为家庭财务兜底——别让一次意外打回原形。"
+    ]},
+    {t:"第三步：指数基金定投", l:[
+      "对普通人，最适合的标的是**宽基指数基金**（如沪深 300、标普 500）：覆盖广、费用低、风险分散，能拿市场平均收益，无需花大量时间选股。",
+      "**定期定额**：每月/每季度固定时间、固定金额买入，无论涨跌坚持不中断——市场低迷时以较低成本买入更多份额，摊平成本，等市场回升获益（微笑曲线）。",
+      "用**闲钱投资**：不影响生活、亏得起才投；「手中有基，心中无基」，长期持有。"
+    ]},
+    {t:"四条底线（入门须知）", l:[
+      "**长期主义**：基金投资是长期的艺术，冲着「赚五到七年的钱」而非短期快钱。",
+      "**闲钱投资**：用亏得起、不影响生活的钱。",
+      "**不盲目跟风**：克服恐惧与贪婪，不被短期涨跌牵着走。",
+      "**因人而异**：比例与方法是建议，请结合自己的收支与风险承受能力调整。"
+    ]}
+  ],
+  quote:[
+    {t:"先存后花、记账、定投——三步就能开始。",f:"入门寄语"},
+    {t:"定投靠的是纪律，不是预测。",f:"入门寄语"},
+    {t:"长期主义、逆向布局、闲钱投资，是基金投资的终极要义。",f:"基金业协会"}
+  ]
+}
+];
+
+/* ============ 状态 ============ */
+const DONE_KEY='money_lessons_done';
+let done=new Set(JSON.parse(localStorage.getItem(DONE_KEY)||'[]'));
+let cur=1;
+let view='overview';
+
+/* ============ 渲染：侧边导航 ============ */
+function renderNav(){
+  const box=document.getElementById('sideNav');
+  let html='';
+  PHASES.forEach(p=>{
+    html+='<div class="phase">'+p.name+'</div><ul class="navlist">';
+    p.lessons.forEach(n=>{
+      const l=LESSONS.find(x=>x.no===n);
+      html+='<li><a href="#lessons-'+n+'" class="'+(done.has(n)?'done':'')+'" data-navless="'+n+'"><span class="no">'+String(n).padStart(2,'0')+'</span>'+l.title+'<span class="dot"></span></a></li>';
+    });
+    html+='</ul>';
+  });
+  box.innerHTML=html;
+}
+
+/* ============ 渲染：总览地图 ============ */
+function renderOverview(){
+  const box=document.getElementById('overviewBody');
+  let html='';
+  PHASES.forEach(p=>{
+    html+='<div class="phase-card"><h2><span class="ph-tag" style="background:'+p.tag+'">'+p.name+'</span>'+p.desc+'</h2>';
+    html+='<p class="ph-desc">'+p.desc+'</p><div class="grid">';
+    p.lessons.forEach(n=>{
+      const l=LESSONS.find(x=>x.no===n);
+      html+='<a href="#lessons-'+n+'"><span class="no">'+String(n).padStart(2,'0')+'</span><span>'+l.title+'</span><span class="st">'+(done.has(n)?'已学':'未学')+'</span></a>';
+    });
+    html+='</div></div>';
+  });
+  box.innerHTML=html;
+}
+
+/* ============ 渲染：单模块 ============ */
+function inline(html){
+  return html
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+}
+function cn(n){const w=['一','二','三','四','五','六'];return w[n-1];}
+function renderLesson(){
+  const l=LESSONS.find(x=>x.no===cur);
+  if(!l)return;
+  let html='';
+  html+='<div class="lesson-card"><div class="lesson-head"><div class="badge">'+String(l.no).padStart(2,'0')+'</div><div><h2>第'+cn(l.no)+'模块 · '+l.title+'</h2><div class="theme">'+l.theme+'</div></div></div>';
+  html+='<div class="part-bar"><a class="part-link" data-part="part-key" href="#part-key">核心要点</a><a class="part-link" data-part="part-deep" href="#part-deep">深入解读</a><a class="part-link" data-part="part-quote" href="#part-quote">金句</a></div>';
+  html+='<div class="lesson-body">';
+  html+='<div id="part-key"><span class="section-label key">核心要点</span><ul class="card-list">';
+  l.key.forEach(k=>{html+='<li>'+inline(k)+'</li>';});
+  html+='</ul></div>';
+  html+='<div id="part-deep"><span class="section-label deep">深入解读</span>';
+  l.deep.forEach(d=>{
+    html+='<div class="deep-block"><div class="dtitle"><span>'+d.t+'</span><span class="chev">▾</span></div><ul class="card-list">';
+    d.l.forEach(x=>{html+='<li>'+inline(x)+'</li>';});
+    html+='</ul></div>';
+  });
+  html+='</div>';
+  html+='<div id="part-quote"><span class="section-label quote">金句</span>';
+  l.quote.forEach(q=>{
+    const src=q.f?('<span class="src">'+q.f+'</span>'):'';
+    html+='<div class="quote-block">'+inline(q.t)+src+'</div>';
+  });
+  html+='</div></div></div>';
+  html+='<div class="toolbar"><button id="toggleDone" class="'+(done.has(l.no)?'on':'')+'">'+(done.has(l.no)?'已标记完成 · 点击取消':'标记本模块已完成')+'</button></div>';
+  document.getElementById('lessonBody').innerHTML=html;
+  document.getElementById('curPos').textContent='第 '+l.no+' / 6 模块';
+  document.getElementById('toggleDone').onclick=toggleDone;
+  document.querySelectorAll('.navlist a').forEach(a=>a.classList.toggle('active',a.dataset.navless==String(cur)));
+}
+
+/* ============ 完成切换 / 进度 ============ */
+function toggleDone(){
+  const was=done.has(cur);
+  was?done.delete(cur):done.add(cur);
+  localStorage.setItem(DONE_KEY,JSON.stringify([...done]));
+  renderLesson();renderNav();renderOverview();updateProgress();
+  toast(was?'已取消第'+cn(cur)+'模块的完成标记':'已标记第'+cn(cur)+'模块完成');
+}
+function updateProgress(){
+  const n=done.size;
+  document.getElementById('progFill').style.width=(n/6*100)+'%';
+  document.getElementById('progPct').textContent=n+'/6';
+}
+
+/* ============ Hash 路由 ============ */
+function parseHash(){
+  const h=(location.hash||'').replace('#','');
+  if(/^lessons-(\d+)$/.test(h)){const n=parseInt(h.split('-')[1]);return {view:'lessons',no:(n>=1&&n<=6)?n:1};}
+  if(h==='view-lessons')return {view:'lessons'};
+  if(h==='concepts')return {view:'concepts'};
+  if(h==='calc')return {view:'calc'};
+  if(h==='source')return {view:'source'};
+  return {view:'overview'};
+}
+function setHash(v,no){
+  const h=(v==='lessons'&&no)?('lessons-'+no):v;
+  if(location.hash==='#'+h){goView(v);return;}
+  location.hash=h;
+}
+function applyHash(){
+  const p=parseHash();
+  if(p.no){cur=p.no;}
+  goView(p.view);
+}
+function goView(v){
+  view=v;
+  document.querySelectorAll('.view').forEach(s=>s.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  if(v==='lessons'){renderLesson();refreshQuote();}
+  if(v==='overview'){renderOverview();}
+  if(v==='concepts'){renderConcepts('');}
+  if(v==='calc'){document.getElementById('calcResult').textContent='输入一个年化收益率，看看你的钱多久翻倍。';}
+  if(v==='source'){renderSource();}
+  document.querySelectorAll('.navlist a').forEach(a=>a.classList.toggle('active',a.dataset.navless==String(cur)));
+  const navtop=document.querySelector('.navtop');
+  if(navtop)navtop.classList.toggle('active',v!=='lessons');
+  document.getElementById('sidebar').classList.remove('open');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ============ 速查表 ============ */
+function renderConcepts(kw){
+  const body=document.getElementById('conceptBody');
+  const q=(kw||'').trim().toLowerCase();
+  const list=CONCEPTS.filter(c=>!q||c.n.toLowerCase().includes(q)||c.d.toLowerCase().includes(q)||c.c.toLowerCase().includes(q));
+  let html='';
+  list.forEach(c=>{
+    html+='<tr><td class="cname">'+c.n+'</td><td>'+c.d+'</td><td class="ccur">'+c.c+'</td></tr>';
+  });
+  body.innerHTML=html;
+  document.getElementById('conceptEmpty').style.display=list.length?'none':'block';
+}
+
+/* ============ 来源说明 ============ */
+function renderSource(){
+  let html='<h2>来源与说明</h2><p class="intro">'+SOURCE.intro+'</p><h3>主要依据</h3><ul>';
+  SOURCE.books.forEach(x=>html+='<li>'+inline(x)+'</li>');
+  html+='</ul><div class="note">'+SOURCE.note+'</div>';
+  document.getElementById('sourceBody').innerHTML=html;
+}
+
+/* ============ 金句轮播 ============ */
+let qidx=-1;
+function refreshQuote(){
+  if(QUOTES.length===0)return;
+  let n;
+  do{n=Math.floor(Math.random()*QUOTES.length);}while(n===qidx&&QUOTES.length>1);
+  qidx=n;const q=QUOTES[n];
+  document.getElementById('quoteDaily').innerHTML=
+    '<div class="qtext">'+q.t+'</div><div class="qfrom">'+(q.f?q.f:'')+'</div><div class="btns"><button onclick="nextQuote()">换一句</button><button data-quoteall="1">全部金句</button></div>';
+}
+function nextQuote(){refreshQuote();}
+function openQuoteModal(){
+  let h='';
+  QUOTES.forEach(q=>{h+='<div class="m-quote">'+q.t+(q.f?'<span class="f">'+q.f+'</span>':'')+'</div>';});
+  document.getElementById('quoteModalBody').innerHTML=h;
+  document.getElementById('quoteModal').classList.add('open');
+}
+function closeQuoteModal(){document.getElementById('quoteModal').classList.remove('open');}
+
+/* ============ toast ============ */
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show');},1800);
+}
+
+/* ============ 字号控制 ============ */
+function setFont(delta){
+  let fs=parseInt(localStorage.getItem('money_font')||'16');
+  fs=Math.min(18,Math.max(14,fs+delta));
+  localStorage.setItem('money_font',String(fs));
+  document.documentElement.style.setProperty('--fs',fs+'px');
+}
+
+/* ============ 事件绑定 ============ */
+document.addEventListener('click',function(e){
+  const go=e.target.closest('[data-go]');
+  if(go){e.preventDefault();setHash('lessons',parseInt(go.dataset.go));return;}
+  const nav=e.target.closest('[data-nav]');
+  if(nav){e.preventDefault();setHash(nav.dataset.nav);return;}
+  const pl=e.target.closest('.part-link');
+  if(pl){e.preventDefault();const t=document.getElementById(pl.dataset.part);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});return;}
+  const dt=e.target.closest('.dtitle');
+  if(dt){dt.parentElement.classList.toggle('collapsed');return;}
+  if(e.target.closest('#toTop')){window.scrollTo({top:0,behavior:'smooth'});return;}
+  if(e.target.closest('[data-quoteall]')){openQuoteModal();return;}
+  if(e.target.closest('#quoteClose')){closeQuoteModal();return;}
+  if(e.target.closest('.modal-overlay')&&!e.target.closest('.modal')){closeQuoteModal();return;}
+  if(e.target.closest('#menuToggle')){document.getElementById('sidebar').classList.toggle('open');return;}
+});
+document.getElementById('prevBtn').addEventListener('click',function(){if(cur>1)setHash('lessons',cur-1);});
+document.getElementById('nextBtn').addEventListener('click',function(){if(cur<6)setHash('lessons',cur+1);});
+document.getElementById('resetAllBtn').addEventListener('click',function(){
+  if(confirm('确定要清空全部学习进度标记吗？')){
+    done=new Set();localStorage.setItem(DONE_KEY,'[]');
+    renderNav();renderOverview();updateProgress();toast('已清空全部学习进度');
+  }
+});
+document.getElementById('conceptSearch').addEventListener('input',function(){renderConcepts(this.value);});
+document.getElementById('clearSearch').addEventListener('click',function(){
+  document.getElementById('conceptSearch').value='';renderConcepts('');
+});
+document.getElementById('fontDec').addEventListener('click',function(){setFont(-1);});
+document.getElementById('fontInc').addEventListener('click',function(){setFont(1);});
+document.getElementById('calcBtn').addEventListener('click',function(){
+  const r=parseFloat(document.getElementById('rateInput').value);
+  const out=document.getElementById('calcResult');
+  if(!r||isNaN(r)||r<=0){out.textContent='请输入一个大于 0 的年化收益率（如 6 表示 6%）。';return;}
+  const years=(72/r).toFixed(1);
+  out.innerHTML='年化收益率 <b>'+r+'%</b>，本金约 <b>'+years+' 年</b>翻一倍。（72 法则估算）';
+});
+document.addEventListener('keydown',function(e){
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  if(e.key==='ArrowLeft'){if(cur>1){e.preventDefault();setHash('lessons',cur-1);}}
+  if(e.key==='ArrowRight'){if(cur<6){e.preventDefault();setHash('lessons',cur+1);}}
+});
+window.addEventListener('scroll',function(){
+  document.getElementById('toTop').classList.toggle('show',window.scrollY>500);
+});
+window.addEventListener('hashchange',applyHash);
+
+/* ============ 初始化 ============ */
+renderNav();renderOverview();updateProgress();setFont(0);applyHash();
+</script>
+</body>
+</html>
